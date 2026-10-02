@@ -1,0 +1,6 @@
+# Les modeles compiles ne sont pas la source.
+*.json
+!bicepconfig.json
+
+# Sorties locales
+.azure/
