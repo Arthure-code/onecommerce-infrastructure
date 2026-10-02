@@ -32,7 +32,7 @@ The diagram is a draw.io file, [docs/architecture.drawio](docs/architecture.draw
 
 **Names survive a second run.** The four random characters each application carries come from `uniqueString` seeded with the resource group, not from the clock. Deploying twice gives the same five applications instead of five more.
 
-**The pool is Standard, and that is the only answer that holds.** The brief asks for the basic tier with 50 DTU minimum and 200 maximum per database. A Basic pool stops at 5 DTU per database, so the three numbers contradict each other; Standard is the cheapest tier where 50 and 200 exist, and the template says so where it sets them.
+**The pool is Standard, and that is the cheapest tier that holds.** The three databases need a floor of 50 DTU each and a ceiling of 200. A Basic pool stops at 5 DTU per database, so it cannot carry those numbers at all. The template says so where it sets them, rather than leaving the next reader to find out.
 
 **Nothing answers in plain text.** The applications and their slots refuse HTTP, ask for TLS 1.2 and turn FTPS off. The storage account refuses HTTP and public blob access. The SQL server asks for TLS 1.2 and lets through a single address range.
 
@@ -57,7 +57,11 @@ az bicep build --file main.bicep
 
 ## Résumé
 
-Infrastructure Azure d'une boutique à cinq services, décrite en Bicep et déployée en une commande. Un modèle d'entrée appelle trois modules : les plans App Service et les applications qui les partagent, le serveur SQL avec son pool élastique et ses trois bases, et le compte de stockage avec son conteneur privé et sa file. Les plans et leurs applications tiennent dans une liste : ajouter une sixième application est une ligne, et rien d'autre dans le déploiement n'a besoin de le savoir. Le niveau d'environnement décide du palier tarifaire, F1 en développement, B1 en test, S1 en production, et c'est lui seul qui fait exister le slot de préproduction et la règle d'auto-scale, parce qu'un plan gratuit ne les accepte pas. Les quatre caractères aléatoires de chaque nom viennent du groupe de ressources et non de l'horloge, donc un second déploiement redonne les mêmes applications. Le pool est Standard et le modèle explique pourquoi : le niveau de base plafonne à 5 DTU par base, ce qui rend les 50 et 200 demandés impossibles. Rien ne répond en clair, et le linter est réglé en mode strict sur des règles qui sont des erreurs, pas des suggestions.
+Infrastructure Azure d'une boutique à cinq services, décrite en Bicep et déployée en une commande. Un modèle d'entrée appelle trois modules : les plans App Service et les applications qui les partagent, le serveur SQL avec son pool élastique et ses trois bases, le compte de stockage avec son conteneur privé et sa file.
+
+Les plans et leurs applications tiennent dans une liste : ajouter une sixième application est une ligne, et rien d'autre n'a besoin de le savoir. Le niveau d'environnement décide du palier tarifaire, et lui seul fait exister le slot de préproduction et la règle d'auto-scale, qu'un plan gratuit n'accepte pas.
+
+Les quatre caractères aléatoires de chaque nom viennent du groupe de ressources et non de l'horloge, donc un second déploiement redonne les mêmes applications. Rien ne répond en clair, et le linter passe en erreurs ce que l'outil ne signale que du bout des lèvres.
 
 ## Licence
 
