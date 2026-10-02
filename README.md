@@ -16,7 +16,7 @@ Bicep, Azure Resource Manager, Azure CLI.
 
 **What one deployment creates**
 
-![The resource group drawn out: on the left two App Service plans, the first carrying the shop and the product API, the second carrying the file, order and loyalty APIs; in the middle the SQL server and its elastic pool holding three databases; on the right the storage account with a private images container and an order queue. A note recalls that Dev runs on F1, Test on B1 and Prod on S1, and that Prod alone adds a staging slot and an autoscale rule](docs/architecture.svg)
+![The Bicep visualizer in Visual Studio Code: three groups, one per module. On the left the storage account with its blob service, its images container, its queue service and its orders queue. In the middle the SQL server, its firewall rule, its elastic pool and the databases module. On the right the App Service plan with its applications, their staging slot and the autoscale rule](docs/visualiseur.png)
 
 ## How it works
 
