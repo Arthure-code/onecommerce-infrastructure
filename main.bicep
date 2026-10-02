@@ -1,38 +1,52 @@
+metadata description = 'Everything OneCommerce runs on in one resource group: two App Service plans and their five applications, a SQL server whose three databases share an elastic pool, and a storage account with a private container and a queue.'
 
+@description('Region everything is created in. The two Canadian regions keep the data in the country.')
 @allowed([
-  'CanadaCentral'
-  'CanadaEast'
+  'canadacentral'
+  'canadaeast'
 ])
 param location string
 
+@description('Environment level. It decides the App Service tier, and with it the staging slot and the autoscale rule.')
 @allowed([
   'Dev'
   'Test'
   'Prod'
 ])
-param NiveauPlan string
+param environmentLevel string
 
+@description('Name the Application tag carries on every resource.')
 param applicationName string = 'OneCommerce'
 
+@description('Name of the SQL server, without its srv- prefix.')
 param sqlServerName string
+
+@description('Administrator account of the SQL server.')
 param sqlAdminLogin string
+
+@description('Administrator password of the SQL server. It is asked for at deployment time and never stored here.')
 @secure()
 @minLength(10)
 @maxLength(20)
-param sqlAdminPwd string
+param sqlAdminPassword string
 
-param storageName string
+@description('Seed of the storage account name. The name itself is derived from it and from the resource group.')
+param storageNameSeed string
 
+// Two plans, because the assignment asks for the shop and the product API
+// to carry their own load, and the three other APIs to share the second.
+// Adding an application to a plan is one line in this list: nothing else
+// in the deployment has to know about it.
 var appServiceGroups = [
   {
-    appPlanName: 'Onecommerce-plan-1'
+    planName: 'sp-OneCommerce-plan-1'
     webAppNames: [
       'OneCommerceMVC'
       'OneProduitAPI'
     ]
   }
   {
-    appPlanName: 'Onecommerce-plan-2'
+    planName: 'sp-OneCommerce-plan-2'
     webAppNames: [
       'OneFichiersAPI'
       'OneCommandesAPI'
@@ -41,112 +55,57 @@ var appServiceGroups = [
   }
 ]
 
-var databases = [
+var databaseNames = [
   'Produits'
   'Commandes'
   'Fidelite'
 ]
 
+// The one range allowed through the SQL firewall.
+var allowedIpFrom = '100.0.0.1'
+var allowedIpTo = '100.10.255.255'
 
-module webApps 'modules/appService.bicep' = [ for group in appServiceGroups: {
-    name: group.appPlanName
-    params: {
-      location: location
-      appPlanName: 'sp-${group.appPlanName}'
-      webAppNames: group.webAppNames
-      NiveauPlan: NiveauPlan
-      tagApplication: applicationName
-    }
+module appServices 'modules/appService.bicep' = [for group in appServiceGroups: {
+  name: group.planName
+  params: {
+    location: location
+    appPlanName: group.planName
+    webAppNames: group.webAppNames
+    environmentLevel: environmentLevel
+    tagApplication: applicationName
   }
-]
+}]
 
-resource sqlServer 'Microsoft.Sql/servers@2021-11-01' = {
-  name: 'srv-${sqlServerName}'
-  location: location
-  properties: {
-    administratorLogin: sqlAdminLogin
-    administratorLoginPassword: sqlAdminPwd
-    version: '12.0'
-  }
-  tags: {
-    Application: applicationName
-  }
-}
-
-resource firewallRule 'Microsoft.Sql/servers/firewallRules@2021-11-01' = {
-  name: 'AllowedIPRange'
-  parent: sqlServer
-  properties: {
-    startIpAddress: '100.0.0.1'
-    endIpAddress: '100.10.255.255'
+module sqlServer 'modules/sqlServer.bicep' = {
+  name: 'sql-${sqlServerName}'
+  params: {
+    location: location
+    sqlServerName: sqlServerName
+    sqlAdminLogin: sqlAdminLogin
+    sqlAdminPassword: sqlAdminPassword
+    databaseNames: databaseNames
+    allowedIpFrom: allowedIpFrom
+    allowedIpTo: allowedIpTo
+    tagApplication: applicationName
   }
 }
 
-resource elasticPool 'Microsoft.Sql/servers/elasticPools@2021-11-01' = {
-  name: 'pool-${sqlServerName}'
-  parent: sqlServer
-  location: location
-  sku: {
-    name: 'StandardPool'
-    tier: 'Standard'
-    capacity: 200
-  }
-  properties: {
-    perDatabaseSettings: {
-      minCapacity: 50
-      maxCapacity: 200
-    }
-  }
-  tags: {
-    Application: applicationName
+module storage 'modules/storageAccount.bicep' = {
+  name: 'storage-${storageNameSeed}'
+  params: {
+    location: location
+    storageNameSeed: storageNameSeed
+    containerName: 'images'
+    queueName: 'q-commande'
+    tagApplication: applicationName
   }
 }
 
+@description('Addresses the five applications answer on, plan by plan.')
+output webAppHosts array = [for (group, index) in appServiceGroups: appServices[index].outputs.webAppHosts]
 
-module sqlDatabases 'modules/sqlDatabase.bicep' = [ for dbName in databases: {
-    name: 'db-${dbName}'
-    params: {
-      location: location
-      sqlServerName: sqlServer.name
-      elasticPoolName: elasticPool.name
-      databaseName: dbName
-      tagApplication: applicationName
-    }
-  }
-]
+@description('Address the applications reach the databases at.')
+output sqlServerFqdn string = sqlServer.outputs.sqlServerFqdn
 
-
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: 'stone${uniqueString(resourceGroup().id, storageName)}'
-  location: location
-  kind: 'StorageV2'
-  sku: {
-    name: 'Standard_RAGRS'
-  }
-  tags: {
-    Application: applicationName
-  }
-}
-
-resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
-  name: 'default'
-  parent: storageAccount
-}
-
-resource imagesContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-  name: 'images'
-  parent: blobService
-  properties: {
-    publicAccess: 'None'
-  }
-}
-
-resource queueService 'Microsoft.Storage/storageAccounts/queueServices@2023-01-01' = {
-  name: 'default'
-  parent: storageAccount
-}
-
-resource commandQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2023-01-01' = {
-  name: 'q-commande'
-  parent: queueService
-}
+@description('Name the storage account was given.')
+output storageAccountName string = storage.outputs.storageAccountName
