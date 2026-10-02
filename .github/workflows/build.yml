@@ -28,7 +28,7 @@ jobs:
           # Le linter ecrit sur la sortie d'erreur. Tout ce qui n'est pas une
           # ligne d'information sur la configuration arrete l'etape.
           az bicep build --file main.bicep --stdout > /dev/null 2> diagnostics.txt
-          grep -v 'Info Bicep Linter Configuration' diagnostics.txt > restants.txt || true
+          grep -v 'Info Bicep Linter Configuration' diagnostics.txt | grep -v '^[[:space:]]*$' > restants.txt || true
           if [ -s restants.txt ]; then
             echo "Le modele ne compile pas proprement :"
             cat restants.txt
