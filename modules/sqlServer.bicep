@@ -52,8 +52,8 @@ resource sqlServer 'Microsoft.Sql/servers@2025-01-01' = {
   tags: tags
 }
 
-// One range, and nothing else. Azure services are not allowed in either:
-// the applications reach the server from the address range above.
+// One range, and nothing else. The rule that opens the server to every
+// Azure service is deliberately absent.
 resource firewallRule 'Microsoft.Sql/servers/firewallRules@2025-01-01' = {
   name: 'AllowedIpRange'
   parent: sqlServer

@@ -15,8 +15,8 @@ param queueName string
 @description('Value of the Application tag every resource carries.')
 param tagApplication string
 
-// Read access geo-redundant: a second region keeps a readable copy, which
-// is what being able to read while a datacentre is down means.
+// Read access geo-redundant: a second region keeps a copy that can still
+// be read while the first one is down.
 var redundancy = 'Standard_RAGRS'
 
 var tags = {
@@ -25,8 +25,8 @@ var tags = {
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2026-04-01' = {
   // Account names are global and allow 24 lowercase characters at most.
-  // uniqueString gives thirteen from the resource group, which leaves the
-  // stone prefix room and keeps the name the same on a second run.
+  // uniqueString adds thirteen to the five of stone, which fits, and it
+  // derives them from the resource group, so a second run keeps the name.
   name: 'stone${uniqueString(resourceGroup().id, storageNameSeed)}'
   location: location
   kind: 'StorageV2'
