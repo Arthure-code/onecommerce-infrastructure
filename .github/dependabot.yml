@@ -1,0 +1,8 @@
+# Les actions bougent vite et leurs montees majeures changent le
+# comportement de la chaine : elles sont proposees, pas fusionnees seules.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

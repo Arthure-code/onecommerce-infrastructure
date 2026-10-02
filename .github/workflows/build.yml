@@ -1,0 +1,42 @@
+# Repris de l'exemple officiel SonarSource pour un depot sans projet
+# .NET : le scanner generique suffit, puisqu'il n'y a rien a compiler.
+# Deux ecarts : le modele Bicep est compile et passe au linter avant
+# l'analyse, et une version d'API perimee ou un parametre inutilise
+# arretent la chaine.
+name: SonarQube
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Install the Bicep CLI
+        run: az bicep install
+
+      - name: Compile the templates
+        run: |
+          set -o pipefail
+          # Le linter ecrit sur la sortie d'erreur. Tout ce qui n'est pas une
+          # ligne d'information sur la configuration arrete l'etape.
+          az bicep build --file main.bicep --stdout > /dev/null 2> diagnostics.txt
+          grep -v 'Info Bicep Linter Configuration' diagnostics.txt > restants.txt || true
+          if [ -s restants.txt ]; then
+            echo "Le modele ne compile pas proprement :"
+            cat restants.txt
+            exit 1
+          fi
+          echo "Les modeles compilent sans diagnostic."
+
+      - name: SonarQube Cloud scan
+        uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v8.3.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
