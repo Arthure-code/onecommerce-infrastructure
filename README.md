@@ -16,6 +16,12 @@ Bicep, Azure Resource Manager, Azure CLI.
 
 **What one deployment creates**
 
+![The resource group drawn with the official Azure icons: on the left two App Service plans, the first carrying the shop and the product API, the second carrying the file, order and loyalty APIs, with the autoscale rule below them; in the middle the SQL server, its single allowed address range and its elastic pool holding three databases; on the right the storage account with its private images container and its order queue](docs/architecture.png)
+
+The diagram is a draw.io file, [docs/architecture.drawio](docs/architecture.drawio), kept beside the image so anyone can open it and change it.
+
+**What the templates declare**
+
 ![The Bicep visualizer in Visual Studio Code: three groups, one per module. On the left the storage account with its blob service, its images container, its queue service and its orders queue. In the middle the SQL server, its firewall rule, its elastic pool and the databases module. On the right the App Service plan with its applications, their staging slot and the autoscale rule](docs/visualiseur.png)
 
 ## How it works

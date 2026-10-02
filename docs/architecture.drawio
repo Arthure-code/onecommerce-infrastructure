@@ -1,0 +1,119 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="OneCommerce" id="onecommerce">
+    <mxGraphModel dx="1400" dy="900" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1220" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="titre" value="OneCommerce, deployed by main.bicep and its three modules" style="text;html=1;fontSize=18;fontStyle=1;fontColor=#1B1F23;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="740" height="28" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rg" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 6;strokeColor=#8C959F;strokeWidth=2;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="62" width="1140" height="596" as="geometry" />
+        </mxCell>
+        <mxCell id="rgicon" value="rg-onecommerce" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=13;fontColor=#3A3A3A;image=img/lib/azure2/general/Resource_Groups.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="58" y="74" width="26" height="21" as="geometry" />
+        </mxCell>
+
+        <!-- Plan 1 -->
+        <mxCell id="plan1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F9FE;strokeColor=#4A7FB5;" vertex="1" parent="1">
+          <mxGeometry x="74" y="120" width="330" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="plan1icon" value="sp-OneCommerce-plan-1" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=13;fontStyle=1;fontColor=#1B1F23;image=img/lib/azure2/app_services/App_Service_Plans.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="90" y="134" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="mvc" value="webapp-OneCommerceMVC-xxxx" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/app_services/App_Services.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="180" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="produit" value="webapp-OneProduitAPI-xxxx" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/app_services/App_Services.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="228" width="34" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- Plan 2 -->
+        <mxCell id="plan2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F9FE;strokeColor=#4A7FB5;" vertex="1" parent="1">
+          <mxGeometry x="74" y="306" width="330" height="212" as="geometry" />
+        </mxCell>
+        <mxCell id="plan2icon" value="sp-OneCommerce-plan-2" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=13;fontStyle=1;fontColor=#1B1F23;image=img/lib/azure2/app_services/App_Service_Plans.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="90" y="320" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="fichiers" value="webapp-OneFichiersAPI-xxxx" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/app_services/App_Services.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="366" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="commandes" value="webapp-OneCommandesAPI-xxxx" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/app_services/App_Services.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="414" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="fidelite" value="webapp-OneFideliteAPI-xxxx" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/app_services/App_Services.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="462" width="34" height="34" as="geometry" />
+        </mxCell>
+
+        <mxCell id="scale" value="autoscale, on Prod only" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/general/Scale.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="100" y="552" width="34" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- SQL -->
+        <mxCell id="sqlbox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F5FC;strokeColor=#6B5FAE;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="360" height="398" as="geometry" />
+        </mxCell>
+        <mxCell id="sqlicon" value="srv-onecommerce" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=13;fontStyle=1;fontColor=#1B1F23;image=img/lib/azure2/databases/SQL_Server.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="466" y="134" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="pare" value="one allowed range, 100.0.0.1 to 100.10.255.255" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/networking/Firewalls.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="476" y="178" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="poolbox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6B5FAE;" vertex="1" parent="1">
+          <mxGeometry x="468" y="232" width="324" height="256" as="geometry" />
+        </mxCell>
+        <mxCell id="poolicon" value="pool-onecommerce" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=13;fontStyle=1;fontColor=#1B1F23;image=img/lib/azure2/databases/SQL_Elastic_Pools.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="484" y="246" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="pooltexte" value="Standard, 200 DTU, 50 to 200 per database" style="text;html=1;fontSize=11;fontColor=#57606A;align=left;" vertex="1" parent="1">
+          <mxGeometry x="484" y="276" width="300" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="db1" value="db-Produits" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/databases/SQL_Database.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="496" y="306" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="db2" value="db-Commandes" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/databases/SQL_Database.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="496" y="358" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="db3" value="db-Fidelite" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/databases/SQL_Database.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="496" y="410" width="34" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- Stockage -->
+        <mxCell id="stbox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F8F4;strokeColor=#3F8F6B;" vertex="1" parent="1">
+          <mxGeometry x="856" y="120" width="300" height="252" as="geometry" />
+        </mxCell>
+        <mxCell id="sticon" value="stone…" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=13;fontStyle=1;fontColor=#1B1F23;image=img/lib/azure2/storage/Storage_Accounts.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="872" y="134" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="conteneur" value="images, private" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/general/Storage_Container.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="882" y="180" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="file" value="q-commande" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/general/Storage_Queue.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="882" y="230" width="34" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="sttexte" value="RA-GRS, HTTPS only, TLS 1.2,&#10;no public blob access&#10;Written by webapp-OneFichiersAPI" style="text;html=1;fontSize=11;fontColor=#57606A;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="876" y="286" width="270" height="56" as="geometry" />
+        </mxCell>
+
+        <mxCell id="tag" value="Every resource carries Application = &quot;OneCommerce&quot;" style="text;html=1;fontSize=11;fontColor=#57606A;align=left;" vertex="1" parent="1">
+          <mxGeometry x="856" y="396" width="300" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="niveaux" value="&lt;b&gt;Dev runs on F1, Test on B1, Prod on S1&lt;/b&gt;&lt;br&gt;Prod alone adds a staging slot to each application&lt;br&gt;and the autoscale rule on the plan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBF7EE;strokeColor=#B08A3E;align=left;verticalAlign=middle;spacingLeft=12;fontSize=12;fontColor=#1B1F23;" vertex="1" parent="1">
+          <mxGeometry x="856" y="440" width="300" height="78" as="geometry" />
+        </mxCell>
+
+        <mxCell id="l1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#8C959F;strokeWidth=1.5;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="plan1" target="sqlbox">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#8C959F;strokeWidth=1.5;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="plan2" target="sqlbox">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
