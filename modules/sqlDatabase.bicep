@@ -20,18 +20,21 @@ resource sqlServer 'Microsoft.Sql/servers@2025-01-01' existing = {
 }
 
 resource database 'Microsoft.Sql/servers/databases@2025-01-01' = {
-  name: 'db-${databaseName}'
   parent: sqlServer
+  name: 'db-${databaseName}'
   location: location
   sku: {
     name: 'ElasticPool'
     tier: 'Standard'
   }
-  properties: {
-    elasticPoolId: elasticPoolId
+  identity: {
+    type: 'SystemAssigned'
   }
   tags: {
     Application: tagApplication
+  }
+  properties: {
+    elasticPoolId: elasticPoolId
   }
 }
 

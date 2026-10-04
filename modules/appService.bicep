@@ -52,6 +52,12 @@ resource webApp 'Microsoft.Web/sites@2025-03-01' = [for webAppName in webAppName
   // application.
   name: 'webapp-${webAppName}-${substring(uniqueString(resourceGroup().id, webAppName), 0, 4)}'
   location: location
+  // An identity of its own, so an application reaches the database and the
+  // storage account without a secret written anywhere.
+  identity: {
+    type: 'SystemAssigned'
+  }
+  tags: tags
   properties: {
     serverFarmId: servicePlan.id
     httpsOnly: true
@@ -61,13 +67,33 @@ resource webApp 'Microsoft.Web/sites@2025-03-01' = [for webAppName in webAppName
       http20Enabled: true
     }
   }
-  tags: tags
+}]
+
+// A shop and its APIs answer anonymous visitors. Saying so is not the same
+// as forgetting to decide: the choice is written here, and the opposite is
+// one property away.
+resource authentification 'Microsoft.Web/sites/config@2025-03-01' = [for (webAppName, index) in webAppNames: {
+  parent: webApp[index]
+  name: 'authsettingsV2'
+  properties: {
+    globalValidation: {
+      requireAuthentication: false
+      unauthenticatedClientAction: 'AllowAnonymous'
+    }
+    platform: {
+      enabled: false
+    }
+  }
 }]
 
 resource stagingSlot 'Microsoft.Web/sites/slots@2025-03-01' = [for (webAppName, index) in webAppNames: if (carriesSlots) {
+  parent: webApp[index]
   name: 'staging'
   location: location
-  parent: webApp[index]
+  identity: {
+    type: 'SystemAssigned'
+  }
+  tags: tags
   properties: {
     serverFarmId: servicePlan.id
     httpsOnly: true
@@ -77,7 +103,6 @@ resource stagingSlot 'Microsoft.Web/sites/slots@2025-03-01' = [for (webAppName, 
       http20Enabled: true
     }
   }
-  tags: tags
 }]
 
 resource autoscale 'Microsoft.Insights/autoscalesettings@2022-10-01' = if (carriesSlots) {

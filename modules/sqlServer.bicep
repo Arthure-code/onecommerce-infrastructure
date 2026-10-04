@@ -42,21 +42,27 @@ var tags = {
 resource sqlServer 'Microsoft.Sql/servers@2025-01-01' = {
   name: 'srv-${sqlServerName}'
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
+  tags: tags
   properties: {
     administratorLogin: sqlAdminLogin
     administratorLoginPassword: sqlAdminPassword
     version: '12.0'
     minimalTlsVersion: '1.2'
+    // The applications live outside a virtual network, so the server keeps
+    // its public endpoint. What protects it is the firewall below: one
+    // range, and no rule for Azure services.
     publicNetworkAccess: 'Enabled'
   }
-  tags: tags
 }
 
 // One range, and nothing else. The rule that opens the server to every
 // Azure service is deliberately absent.
 resource firewallRule 'Microsoft.Sql/servers/firewallRules@2025-01-01' = {
-  name: 'AllowedIpRange'
   parent: sqlServer
+  name: 'AllowedIpRange'
   properties: {
     startIpAddress: allowedIpFrom
     endIpAddress: allowedIpTo
@@ -64,21 +70,21 @@ resource firewallRule 'Microsoft.Sql/servers/firewallRules@2025-01-01' = {
 }
 
 resource elasticPool 'Microsoft.Sql/servers/elasticPools@2025-01-01' = {
-  name: 'pool-${sqlServerName}'
   parent: sqlServer
+  name: 'pool-${sqlServerName}'
   location: location
   sku: {
     name: '${poolTier}Pool'
     tier: poolTier
     capacity: poolCapacity
   }
+  tags: tags
   properties: {
     perDatabaseSettings: {
       minCapacity: databaseMinCapacity
       maxCapacity: databaseMaxCapacity
     }
   }
-  tags: tags
 }
 
 module databases 'sqlDatabase.bicep' = [for databaseName in databaseNames: {

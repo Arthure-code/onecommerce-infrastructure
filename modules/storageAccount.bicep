@@ -29,40 +29,59 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2026-04-01' = {
   // derives them from the resource group, so a second run keeps the name.
   name: 'stone${uniqueString(resourceGroup().id, storageNameSeed)}'
   location: location
-  kind: 'StorageV2'
   sku: {
     name: redundancy
   }
+  kind: 'StorageV2'
+  identity: {
+    type: 'SystemAssigned'
+  }
+  tags: tags
   properties: {
     supportsHttpsTrafficOnly: true
     minimumTlsVersion: 'TLS1_2'
     allowBlobPublicAccess: false
     allowSharedKeyAccess: true
+    // Azure encrypts at rest whether this block is here or not. Writing it
+    // down says which keys are used and leaves nothing to assume.
+    encryption: {
+      keySource: 'Microsoft.Storage'
+      requireInfrastructureEncryption: false
+      services: {
+        blob: {
+          enabled: true
+          keyType: 'Account'
+        }
+        queue: {
+          enabled: true
+          keyType: 'Account'
+        }
+      }
+    }
   }
-  tags: tags
 }
 
 resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2026-04-01' = {
-  name: 'default'
   parent: storageAccount
+  name: 'default'
 }
 
 resource imagesContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2026-04-01' = {
-  name: containerName
   parent: blobService
+  name: containerName
   properties: {
     publicAccess: 'None'
   }
 }
 
 resource queueService 'Microsoft.Storage/storageAccounts/queueServices@2026-04-01' = {
-  name: 'default'
   parent: storageAccount
+  name: 'default'
 }
 
 resource ordersQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2026-04-01' = {
-  name: queueName
   parent: queueService
+  name: queueName
 }
 
 @description('Name the account was given.')
