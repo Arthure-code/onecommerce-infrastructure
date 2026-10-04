@@ -72,6 +72,8 @@ resource webApp 'Microsoft.Web/sites@2025-03-01' = [for webAppName in webAppName
 // A shop and its APIs answer anonymous visitors. Saying so is not the same
 // as forgetting to decide: the choice is written here, and the opposite is
 // one property away.
+// It sits beside the applications rather than inside them because Bicep
+// refuses a nested resource within a for-expression, BCP160.
 resource authentification 'Microsoft.Web/sites/config@2025-03-01' = [for (webAppName, index) in webAppNames: {
   parent: webApp[index]
   name: 'authsettingsV2'
