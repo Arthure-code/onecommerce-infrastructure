@@ -108,6 +108,7 @@ resource stagingSlot 'Microsoft.Web/sites/slots@2025-03-01' = [for (webAppName, 
 resource autoscale 'Microsoft.Insights/autoscalesettings@2022-10-01' = if (carriesSlots) {
   name: 'autoscale-${appPlanName}'
   location: location
+  tags: tags
   properties: {
     targetResourceUri: servicePlan.id
     profiles: [
@@ -162,7 +163,6 @@ resource autoscale 'Microsoft.Insights/autoscalesettings@2022-10-01' = if (carri
       }
     ]
   }
-  tags: tags
 }
 
 @description('Names the applications were given, random suffix included.')

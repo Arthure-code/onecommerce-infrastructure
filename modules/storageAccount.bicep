@@ -43,10 +43,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2026-04-01' = {
     allowBlobPublicAccess: false
     allowSharedKeyAccess: true
     // Azure encrypts at rest whether this block is here or not. Writing it
-    // down says which keys are used and leaves nothing to assume.
+    // down says which keys are used, and asks for the second layer, which
+    // can only be turned on while the account is being created.
     encryption: {
       keySource: 'Microsoft.Storage'
-      requireInfrastructureEncryption: false
+      requireInfrastructureEncryption: true
       services: {
         blob: {
           enabled: true
