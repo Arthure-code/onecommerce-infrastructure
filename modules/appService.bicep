@@ -20,17 +20,14 @@ param environmentLevel string
 @description('Value of the Application tag every resource carries.')
 param tagApplication string
 
-// The three tiers the deployment offers. F1 is free and runs one instance,
-// B1 is the first paid tier, S1 is the first one that carries deployment
-// slots and autoscale.
 var skuByLevel = {
   Dev: 'F1'
   Test: 'B1'
   Prod: 'S1'
 }
 
-// Slots and autoscale exist from S1 upwards. Asking for them on F1 fails
-// the deployment rather than being quietly ignored.
+// Deployment slots and autoscale exist from S1 upwards. Asking for them
+// on a free plan fails the deployment.
 var carriesSlots = environmentLevel == 'Prod'
 
 var tags = {
@@ -47,13 +44,10 @@ resource servicePlan 'Microsoft.Web/serverfarms@2025-03-01' = {
 }
 
 resource webApp 'Microsoft.Web/sites@2025-03-01' = [for webAppName in webAppNames: {
-  // Four characters drawn from the resource group, not from the clock: the
-  // same deployment run twice gives the same name rather than a second
-  // application.
+  // uniqueString is derived from the resource group, so a second
+  // deployment produces the same four characters.
   name: 'webapp-${webAppName}-${substring(uniqueString(resourceGroup().id, webAppName), 0, 4)}'
   location: location
-  // An identity of its own, so an application reaches the database and the
-  // storage account without a secret written anywhere.
   identity: {
     type: 'SystemAssigned'
   }
@@ -69,11 +63,8 @@ resource webApp 'Microsoft.Web/sites@2025-03-01' = [for webAppName in webAppName
   }
 }]
 
-// A shop and its APIs answer anonymous visitors. Saying so is not the same
-// as forgetting to decide: the choice is written here, and the opposite is
-// one property away.
-// It sits beside the applications rather than inside them because Bicep
-// refuses a nested resource within a for-expression, BCP160.
+// Bicep refuses a nested resource inside a for-expression, BCP160, so the
+// configuration is attached to each application rather than declared in it.
 resource authentification 'Microsoft.Web/sites/config@2025-03-01' = [for (webAppName, index) in webAppNames: {
   parent: webApp[index]
   name: 'authsettingsV2'
@@ -123,7 +114,6 @@ resource autoscale 'Microsoft.Insights/autoscalesettings@2022-10-01' = if (carri
         }
         rules: [
           {
-            // One instance more above 70 % of processor.
             metricTrigger: {
               metricName: 'CpuPercentage'
               metricResourceUri: servicePlan.id
@@ -142,8 +132,6 @@ resource autoscale 'Microsoft.Insights/autoscalesettings@2022-10-01' = if (carri
             }
           }
           {
-            // And one instance less below 40 %, because a plan that only
-            // ever grows keeps costing what it no longer needs.
             metricTrigger: {
               metricName: 'CpuPercentage'
               metricResourceUri: servicePlan.id

@@ -27,9 +27,8 @@ param allowedIpTo string
 @description('Value of the Application tag every resource carries.')
 param tagApplication string
 
-// Fifty DTU as a floor and two hundred as a ceiling, per database. A Basic
-// pool stops at five DTU per database, so it cannot hold those numbers at
-// all. Standard is the first tier where they exist, and the cheapest one.
+// A Basic pool stops at 5 DTU per database. Standard is the first tier
+// that reaches the 50 and 200 set below.
 var poolTier = 'Standard'
 var poolCapacity = 200
 var databaseMinCapacity = 50

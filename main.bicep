@@ -33,10 +33,6 @@ param sqlAdminPassword string
 @description('Seed of the storage account name. The name itself is derived from it and from the resource group.')
 param storageNameSeed string
 
-// Two plans. The shop and the product API carry the customer traffic, so
-// they keep one to themselves; the three other APIs share the second.
-// Adding an application to a plan is one line in this list: nothing else
-// in the deployment has to know about it.
 var appServiceGroups = [
   {
     planName: 'sp-OneCommerce-plan-1'
@@ -61,7 +57,6 @@ var databaseNames = [
   'Fidelite'
 ]
 
-// The one range allowed through the SQL firewall.
 var allowedIpFrom = '100.0.0.1'
 var allowedIpTo = '100.10.255.255'
 
