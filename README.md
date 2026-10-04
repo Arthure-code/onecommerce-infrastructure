@@ -34,7 +34,7 @@ The diagram is a draw.io file, [docs/architecture.drawio](docs/architecture.draw
 
 **The pool is Standard, and that is the cheapest tier that holds.** Each database is given a floor of 50 DTU and a ceiling of 200. A Basic pool stops at 5 DTU per database, so it cannot carry those numbers at all. A comment sits where those two numbers are set, so the next reader does not have to work it out.
 
-**Nothing answers in plain text.** The applications and their slots refuse HTTP, ask for TLS 1.2 and turn FTPS off. The storage account refuses HTTP and public blob access. The SQL server asks for TLS 1.2 and lets through a single address range.
+**Nothing answers in plain text.** The applications and their slots refuse HTTP, ask for TLS 1.2 and turn FTPS off. The storage account refuses HTTP and public blob access. The SQL server asks for TLS 1.2, and its firewall lets through one address range and the resources running inside Azure, which is how the applications reach it.
 
 **The linter is turned up and the templates pass it.** `bicepconfig.json` turns unused parameters, hand-built resource identifiers, missing parent properties and string concatenation where interpolation belongs into errors; a stale API version stays a warning. The chain stops on either, so `bicep build` reports nothing at all on the five templates.
 

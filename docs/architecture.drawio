@@ -58,7 +58,7 @@
         <mxCell id="sqlicon" value="srv-onecommerce" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=13;fontStyle=1;fontColor=#1B1F23;image=img/lib/azure2/databases/SQL_Server.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=8;" vertex="1" parent="1">
           <mxGeometry x="466" y="134" width="26" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="pare" value="one allowed range, 100.0.0.1 to 100.10.255.255" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/networking/Firewalls.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
+        <mxCell id="pare" value="one address range, plus the resources inside Azure" style="image;aspect=fixed;html=1;points=[];align=left;fontSize=12;fontColor=#1B1F23;image=img/lib/azure2/networking/Firewalls.svg;verticalLabelPosition=middle;verticalAlign=middle;labelPosition=right;spacingLeft=10;" vertex="1" parent="1">
           <mxGeometry x="476" y="178" width="30" height="30" as="geometry" />
         </mxCell>
 

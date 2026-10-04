@@ -51,21 +51,25 @@ resource sqlServer 'Microsoft.Sql/servers@2025-01-01' = {
     administratorLoginPassword: sqlAdminPassword
     version: '12.0'
     minimalTlsVersion: '1.2'
-    // The applications live outside a virtual network, so the server keeps
-    // its public endpoint. What protects it is the firewall below: one
-    // range, and no rule for Azure services.
     publicNetworkAccess: 'Enabled'
   }
 }
 
-// One range, and nothing else. The rule that opens the server to every
-// Azure service is deliberately absent.
 resource firewallRule 'Microsoft.Sql/servers/firewallRules@2025-01-01' = {
   parent: sqlServer
   name: 'AllowedIpRange'
   properties: {
     startIpAddress: allowedIpFrom
     endIpAddress: allowedIpTo
+  }
+}
+
+resource azureServicesRule 'Microsoft.Sql/servers/firewallRules@2025-01-01' = {
+  parent: sqlServer
+  name: 'AllowAllWindowsAzureIps'
+  properties: {
+    startIpAddress: '0.0.0.0'
+    endIpAddress: '0.0.0.0'
   }
 }
 
