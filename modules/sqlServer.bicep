@@ -1,4 +1,4 @@
-metadata description = 'The SQL server, the elastic pool its databases share, the single firewall range allowed in, and the databases themselves.'
+metadata description = 'The SQL server, the elastic pool its databases share, the firewall rules that let callers in, and the databases themselves.'
 
 @description('Name of the server, without its srv- prefix.')
 param sqlServerName string
